@@ -308,9 +308,10 @@ packages:
   schema_guard:
     dependency: "direct main"
     description:
-      path: "../.."
-      relative: true
-    source: path
+      name: schema_guard
+      sha256: "4135943880d52115a16b85c9d0e5ed2702220f824be4b32b01623f0332aa4ada"
+      url: "https://pub.dev"
+    source: hosted
     version: "0.1.0"
   shelf:
     dependency: transitive
