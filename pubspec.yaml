@@ -1,0 +1,13 @@
+name: schema_guard
+description: "Version-aware compatibility and migration checks for API payloads and local storage in Dart and Flutter."
+version: 0.1.0
+homepage: https://pub.dev/packages/schema_guard
+repository: https://github.com/handertool/storage_migration
+issue_tracker: https://github.com/handertool/storage_migration/issues
+
+environment:
+  sdk: ^3.13.2
+
+dev_dependencies:
+  lints: ^6.0.0
+  test: ^1.25.0

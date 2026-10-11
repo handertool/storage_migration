@@ -1,0 +1,14 @@
+targets:
+  $default:
+    builders:
+      schema_guard_generator:
+        generate_for:
+          - lib/**.dart
+
+builders:
+  schema_guard_generator:
+    import: "package:schema_guard_generator/builder.dart"
+    builder_factories: ["schemaGuardBuilder"]
+    build_extensions: {".dart": [".schema_guard.g.dart"]}
+    auto_apply: dependents
+    build_to: source
