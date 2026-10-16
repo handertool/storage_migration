@@ -11,21 +11,24 @@ The separate `SchemaVersion`, `SchemaProduct`, and `SchemaEndpoint` annotations
 are also supported. Models may use both forms, but conflicting values fail
 generation; matching values are accepted.
 
-Direct nested objects are supported. Nested collections and maps, custom
-converters, and one-directional fields require an explicit
+Direct nested objects, lists of JSON scalar values (`String`, `int`, `double`,
+`num`, and `bool`), and string-keyed maps of scalar values are supported.
+Collections containing model objects or nested collections require an explicit
 `SchemaSerializedType` override or are rejected to avoid unsafe inference.
+Custom converters and one-directional fields also require an explicit
+serialized-type override.
 
 ## Install
 
 ```yaml
 dependencies:
   json_annotation: ^4.12.0
-  schema_guard: ^0.1.0
+  schema_guard: ^0.1.1
 
 dev_dependencies:
   build_runner: ^2.16.0
   json_serializable: ^6.14.0
-  schema_guard_generator: ^0.1.0
+  schema_guard_generator: ^0.1.1
 ```
 
 Add the generated part to an annotated `json_serializable` model:

@@ -38,7 +38,9 @@ class SchemaSnapshot {
     if (contract is! Map) {
       throw const FormatException('Snapshot contract must be an object.');
     }
-    return _contract(contract.cast<String, dynamic>());
+    return _contract(
+      _stringKeyedMap(contract, 'Snapshot contract keys must be strings.'),
+    );
   }
 
   /// Imports the contract-shaped map returned by [SchemaContract.toJson].
@@ -51,7 +53,9 @@ class SchemaSnapshot {
     if (value is! Map) {
       throw const FormatException('Schema snapshot must be a JSON object.');
     }
-    return fromJson(value.cast<String, dynamic>());
+    return fromJson(
+      _stringKeyedMap(value, 'Schema snapshot keys must be strings.'),
+    );
   }
 
   static SchemaContract _contract(Map<String, dynamic> value) {
@@ -69,7 +73,9 @@ class SchemaSnapshot {
       version: version,
       product: product,
       endpoint: endpoint,
-      fields: _fields(fields.cast<String, dynamic>()),
+      fields: _fields(
+        _stringKeyedMap(fields, 'Snapshot fields must use string keys.'),
+      ),
     );
   }
 
@@ -80,7 +86,10 @@ class SchemaSnapshot {
     if (value is! Map) {
       throw FormatException('Snapshot field "$key" must be an object.');
     }
-    final data = value.cast<String, dynamic>();
+    final data = _stringKeyedMap(
+      value,
+      'Snapshot field "$key" keys must be strings.',
+    );
     final name = data['name'];
     final type = data['type'];
     if (name is! String || type is! String) {
@@ -105,9 +114,23 @@ class SchemaSnapshot {
       isOptional: _bool(data, 'isOptional', false),
       nestedFields: nested == null
           ? null
-          : _fields(nested.cast<String, dynamic>()),
+          : _fields(
+              _stringKeyedMap(
+                nested,
+                'Snapshot nested fields for "$key" must use string keys.',
+              ),
+            ),
       enumValues: enums?.cast<String>(),
     );
+  }
+
+  static Map<String, dynamic> _stringKeyedMap(Map value, String message) {
+    final result = <String, dynamic>{};
+    for (final entry in value.entries) {
+      if (entry.key is! String) throw FormatException(message);
+      result[entry.key as String] = entry.value;
+    }
+    return result;
   }
 
   static bool _bool(Map<String, dynamic> value, String key, bool fallback) {

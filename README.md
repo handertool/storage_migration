@@ -38,7 +38,7 @@ For manual contracts or fixture tests:
 
 ```yaml
 dev_dependencies:
-  schema_guard: ^0.1.0
+  schema_guard: ^0.1.1
 ```
 
 For `json_serializable` model generation:
@@ -50,8 +50,8 @@ dependencies:
 dev_dependencies:
   build_runner: ^2.16.0
   json_serializable: ^6.14.0
-  schema_guard: ^0.1.0
-  schema_guard_generator: ^0.1.0
+  schema_guard: ^0.1.1
+  schema_guard_generator: ^0.1.1
 ```
 
 ## How compatibility checking works
@@ -177,8 +177,10 @@ final currentContract = SchemaContractAdapter.fromMetadata(
 ```
 
 The generated field names follow the JSON names, including `fieldRename` and
-`@JsonKey(name: ...)`. Direct nested objects are supported. Nested objects
-inside lists or maps must currently be handled manually.
+`@JsonKey(name: ...)`. Direct nested objects, scalar JSON lists, and
+string-keyed maps of scalar values are supported. Nested objects inside lists
+or maps must currently be handled manually unless their serialized type is
+declared explicitly.
 
 For custom JSON converters, declare the serialized type explicitly:
 

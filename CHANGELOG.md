@@ -1,3 +1,11 @@
+## 0.1.1
+
+* Reject malformed schema snapshots with non-string map keys using
+  `FormatException`.
+* Support inferred scalar lists and string-keyed maps of scalar values in the
+  optional generator, with explicit serialized-type overrides taking
+  precedence over Dart type inference.
+
 ## 0.1.0
 
 * Initial release of `schema_guard`.

@@ -201,10 +201,10 @@ class SchemaGuardGenerator extends Generator {
         element: field,
       );
     }
-    final description = _describe(field.type, field);
     if (type != null) {
       return _Field(name, type, required, nullable);
     }
+    final description = _describe(field.type, field);
     return _Field(
       name,
       description.type,
@@ -268,10 +268,15 @@ class SchemaGuardGenerator extends Generator {
     }.contains(name)) {
       if (name == 'List' || name == 'Map') {
         final arguments = (type as InterfaceType).typeArguments;
-        if (arguments.any((argument) => argument.element is ClassElement)) {
+        final supported = name == 'List'
+            ? arguments.length == 1 && _isJsonScalar(arguments.single)
+            : arguments.length == 2 &&
+                  arguments.first.isDartCoreString &&
+                  _isJsonScalar(arguments.last);
+        if (!supported) {
           throw InvalidGenerationSourceError(
-            'Field ${field.name} uses a collection of objects; direct nested '
-            'objects are supported, but nested collections are not.',
+            'Field ${field.name} uses a collection that is not a scalar list '
+            'or a string-keyed scalar map.',
             element: field,
           );
         }
@@ -284,6 +289,13 @@ class SchemaGuardGenerator extends Generator {
       element: field,
     );
   }
+
+  bool _isJsonScalar(DartType type) =>
+      type.isDartCoreBool ||
+      type.isDartCoreDouble ||
+      type.isDartCoreInt ||
+      type.isDartCoreNum ||
+      type.isDartCoreString;
 
   int _enumRename(EnumElement element) {
     final annotation = _jsonSerializable.firstAnnotationOf(element);

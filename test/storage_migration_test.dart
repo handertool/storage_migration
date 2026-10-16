@@ -336,6 +336,56 @@ void main() {
     },
   );
 
+  test('Given non-string snapshot map keys, when imported, then it throws FormatException', () {
+    final invalidSnapshots = <Map<String, dynamic>>[
+      {
+        'formatVersion': 1,
+        'contract': {
+          'version': 'v1',
+          'product': 'consumer',
+          'endpoint': '/profile',
+          'fields': <dynamic, dynamic>{
+            1: {'name': 'id', 'type': 'int'},
+          },
+        },
+      },
+      {
+        'formatVersion': 1,
+        'contract': {
+          'version': 'v1',
+          'product': 'consumer',
+          'endpoint': '/profile',
+          'fields': {
+            'profile': {
+              'name': 'profile',
+              'type': 'Map',
+              'nestedFields': <dynamic, dynamic>{
+                1: {'name': 'id', 'type': 'int'},
+              },
+            },
+          },
+        },
+      },
+      {
+        'formatVersion': 1,
+        'contract': <dynamic, dynamic>{
+          1: 'invalid',
+          'version': 'v1',
+          'product': 'consumer',
+          'endpoint': '/profile',
+          'fields': <String, dynamic>{},
+        },
+      },
+    ];
+
+    for (final snapshot in invalidSnapshots) {
+      expect(
+        () => SchemaSnapshot.fromJson(snapshot),
+        throwsA(isA<FormatException>()),
+      );
+    }
+  });
+
   test(
     'Given generated contract metadata, when adapted, then it is imported',
     () {
